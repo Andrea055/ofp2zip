@@ -1,0 +1,3 @@
+[submodule "oppo_decrypt"]
+	path = oppo_decrypt
+	url = https://github.com/bkerler/oppo_decrypt.git

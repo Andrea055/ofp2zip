@@ -1,0 +1,10 @@
+# Test file
+*.ofp
+build.prop
+super_map.csv
+# Generated files from script
+temp
+temp_zip
+zip_template
+*.zip
+super_partition.img
