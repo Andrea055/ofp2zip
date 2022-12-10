@@ -3,7 +3,6 @@ import os
 from lib import updater_script_generator, metadata_generator, parse_super
 import shutil
 import configparser
-import zipfile
 
 config = configparser.ConfigParser()
 config.sections()
@@ -14,7 +13,7 @@ config.sections()
 
 out = "temp"  # Directory of extraction
 removable_images_path = "temp_zip/META-INF/com/google/android/removable_images.txt"
-
+removable_images_path_temp = "removable_images.txt"
 
 def install_dependency():
     os.system("pip3 install -r oppo_decrypt/requirements.txt")
@@ -53,8 +52,11 @@ def is_flashable_file(file):
 
     if config["ignore"]["ignore_list"].count(file) > 0:
         return False
+    if file_ext[file_ext_index] == "img":
+        removable_images = open(removable_images_path_temp, "a")
+        removable_images.write(file + "\n")
 
-    if file_ext[file_ext_index] == "mbn" or file_ext[file_ext_index] == "elf" or file_ext[file_ext_index] == "img" or \
+    if file_ext[file_ext_index] == "mbn" or file_ext[file_ext_index] == "elf" or \
             file_ext[file_ext_index] == "iso":
         if "DigestsToSign" not in file:
             return True
@@ -89,6 +91,7 @@ def clean_temp():
 
 
 def create_zip(filename_zip):
+    shutil.copy("removable_images.txt", removable_images_path)
     filename_zip = filename_zip + ".zip"
 
     try:
@@ -99,7 +102,7 @@ def create_zip(filename_zip):
     os.system("cd temp_zip && python3 -m zipfile -c {} *".format(filename_zip))
     shutil.move("temp_zip/{}". format(filename_zip), filename_zip)
 
-def main(filename, platform, clean_ofp):
+def main(filename, platform):
     install_dependency()
     start_decrypt(filename, platform)
     parse_super.create_super()
@@ -110,8 +113,6 @@ def main(filename, platform, clean_ofp):
     metadata_generator.generate_metadata()
     create_zip(filename)
     clean_temp()
-    if clean_ofp == 1:
-        os.remove(filename)
 
 
 if __name__ == "__main__":
@@ -123,7 +124,6 @@ if __name__ == "__main__":
     parser.add_argument('ofp_file')  # OFP/OPS file
     parser.add_argument('out_zip')  # Out zip
     parser.add_argument('platform')
-    parser.add_argument('remove_ofp')  # 1 or 0
 
     args = parser.parse_args()
-    main(args.ofp_file, args.platform, args.remove_ofp)
+    main(args.ofp_file, args.platform)
