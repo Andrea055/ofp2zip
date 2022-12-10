@@ -1,0 +1,2 @@
+jproperties~=2.1.1
+docopt~=0.6.2

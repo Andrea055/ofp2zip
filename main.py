@@ -15,6 +15,7 @@ out = "temp"  # Directory of extraction
 removable_images_path = "temp_zip/META-INF/com/google/android/removable_images.txt"
 removable_images_path_temp = "removable_images.txt"
 
+
 def install_dependency():
     os.system("pip3 install -r oppo_decrypt/requirements.txt")
 
@@ -88,6 +89,7 @@ def get_all_fw_file():
 def clean_temp():
     shutil.rmtree("temp")
     shutil.rmtree("temp_zip")
+    os.remove("removable_images.txt")
 
 
 def create_zip(filename_zip):
@@ -100,7 +102,8 @@ def create_zip(filename_zip):
         print("No need to clean old zip file")
 
     os.system("cd temp_zip && python3 -m zipfile -c {} *".format(filename_zip))
-    shutil.move("temp_zip/{}". format(filename_zip), filename_zip)
+    shutil.move("temp_zip/{}".format(filename_zip), filename_zip)
+
 
 def main(filename, platform):
     install_dependency()
