@@ -42,7 +42,7 @@ def is_ram_file(partition, file):
 
 
 def generate_script_footer(file, files):
-    print(Fore.YELLOW + "Generating footer of script")
+    print(Fore.GREEN + "Generating footer of script")
     for fw in files:
         file.write("""
 package_extract_file("storage-fw/{fw}", "/tmp/firmware/{fw}");
