@@ -1,12 +1,14 @@
 from jproperties import Properties
+from colorama import Fore, Back, Style
 
 configs = Properties()
 build_prop_path = "build.prop"
 metadata_path = "temp_zip/META-INF/com/android/metadata"
 
+
 def read_build_prop():
     with open(build_prop_path, 'rb') as config_file:
-        # print(config_file)
+        print(Fore.GREEN + "Parsing build.prop...")
         configs.load(config_file)
     return configs
 
@@ -33,4 +35,5 @@ def generate_metadata():
     metadata["ota-downgrade-skip-certification"] = "yes"
 
     with open(metadata_path, "wb") as f:
+        print(Fore.GREEN + "Writing metadata...")
         metadata.store(f, encoding="utf-8")
